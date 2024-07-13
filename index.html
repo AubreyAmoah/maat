@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MAAT</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/d4fd77631c.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1>Speech color changer</h1>
-    <p>Tap/click then say a color to change the background color of the app.</p>
-    <div>
-      <p class="output"><em>…diagnostic messages</em></p>
-      <p class="hints"></p>
+    <div class="container">
+        <button id="microphone" class="microphone">
+            <i class="fa-solid fa-microphone"></i>
+        </button>
     </div>
   </body>
   <script>
@@ -46,6 +46,7 @@
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
+    const microphone = document.getElementById('micropphone');
     const diagnostic = document.querySelector(".output");
     const bg = document.querySelector("html");
     const hints = document.querySelector(".hints");
@@ -57,7 +58,7 @@
     });
     hints.innerHTML = `Tap or click then say a color to change the background color of the app. Try ${colorHTML}.`;
 
-    document.body.onclick = () => {
+    microphone.onclick = () => {
       recognition.start();
       console.log("Ready to receive a color command.");
     };
