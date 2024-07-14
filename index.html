@@ -12,115 +12,40 @@
   </head>
   <body>
     <div class="container">
-      <button id="microphone" class="microphone">
-        <i class="fa-solid fa-microphone"></i>
-      </button>
-      <div class="hints"></div>
-      <p id="intro">
-        Hello, My name is Elsah, and I'm your A.I mathematics assistant.
-      </p>
+      <div class="hints">Welcome</div>
+      <div class="center">
+        <button id="microphone" class="microphone hidden">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
 
-      <div class="page">
-        <h1>Speech Settings</h1>
-
-        <p>Fine tune the settings below for your desirable effect</p>
-
-        <form>
-          <input type="text" class="txt" />
-          <div>
-            <label for="rate">Rate</label
-            ><input
-              type="range"
-              min="0.5"
-              max="2"
-              value="1"
-              step="0.1"
-              id="rate"
-            />
-            <div class="rate-value">1</div>
-            <div class="clearfix"></div>
-          </div>
-          <div>
-            <label for="pitch">Pitch</label
-            ><input
-              type="range"
-              min="0"
-              max="2"
-              value="1"
-              step="0.1"
-              id="pitch"
-            />
-            <div class="pitch-value">1</div>
-            <div class="clearfix"></div>
-          </div>
-          <select></select>
-        </form>
+        <div class="manual-input ">
+         <textarea name="" id="" cols="40" rows="10"></textarea>
+         <p>Press Enter Key When Done</p> 
+        </div>
       </div>
+
+      
+
+      <div class="side-nav">
+        <button class="item">
+          <div class="item-icon"><i class="fa-solid fa-gear"></i></div>
+          <div class="item-text"><p>Voice Settings</p></div>
+        </button>
+        <button class="item">
+          <div class="item-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div class="item-text"><p>Magnifier</p></div>
+        </button>
+        <button class="item">
+          <div class="item-icon"><i class="fa-solid fa-ear-deaf"></i></div>
+          <div class="item-text"><p>Deaf Mode</p></div>
+        </button>
+      </div>
+
+      <div class="workspace"></div>
     </div>
   </body>
+
   <script>
-    const synth = window.speechSynthesis;
-    const intro = document.getElementById("intro");
-    const inputForm = document.querySelector("form");
-    const inputTxt = document.querySelector(".txt");
-    const voiceSelect = document.querySelector("select");
 
-    const pitch = document.querySelector("#pitch");
-    const pitchValue = document.querySelector(".pitch-value");
-    const rate = document.querySelector("#rate");
-    const rateValue = document.querySelector(".rate-value");
-
-    let voices = [];
-
-    function populateVoiceList() {
-      voices = synth.getVoices();
-
-      for (const voice of voices) {
-        const option = document.createElement("option");
-        option.textContent = `${voice.name} (${voice.lang})`;
-
-        if (voice.default) {
-          option.textContent += " — DEFAULT";
-        }
-
-        option.setAttribute("data-lang", voice.lang);
-        option.setAttribute("data-name", voice.name);
-        voiceSelect.appendChild(option);
-      }
-    }
-    populateVoiceList();
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = populateVoiceList;
-    }
-
-    inputForm.onsubmit = (event) => {
-      event.preventDefault();
-
-      const utterThis = new SpeechSynthesisUtterance(intro.innerText);
-      const selectedOption =
-        voiceSelect.selectedOptions[0].getAttribute("data-name");
-      for (const voice of voices) {
-        if (voice.name === selectedOption) {
-          utterThis.voice = voice;
-        }
-      }
-      utterThis.pitch = pitch.value;
-      utterThis.rate = rate.value;
-      synth.speak(utterThis);
-      utterThis.onpause = (event) => {
-        const char = event.utterance.text.charAt(event.charIndex);
-        console.log(
-          `Speech paused at character ${event.charIndex} of "${event.utterance.text}", which is "${char}".`
-        );
-      };
-      inputTxt.blur();
-    };
-    pitch.onchange = () => {
-      pitchValue.textContent = pitch.value;
-    };
-
-    rate.onchange = () => {
-      rateValue.textContent = rate.value;
-    };
   </script>
 </html>
