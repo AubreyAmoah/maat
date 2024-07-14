@@ -117,7 +117,7 @@
     const promptQuestion = prompt.value;
 
     const regex =
-      /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b/gi;
+      /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
 
     function calculateFromStatement(statement) {
       // Convert statement to lowercase to handle case insensitivity
@@ -129,12 +129,15 @@
           /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\baddition\b| \bfrom\b/g,
           "+"
         )
-        .replace(/\bminus\b|\bsubtract\b|\bsubtraction\b|\bnegative\b/g, "-")
+        .replace(
+          /\bminus\b|\bsubtract\b|\bsubtraction\b|\bnegative\b|\bremove\b/g,
+          "-"
+        )
         .replace(
           /\bproduct\b|\bproduct of\b|\bproductof\b|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b/g,
           "*"
         )
-        .replace(/\bdivision\b|\bdivide\b|\bdivided\b/g, '/')
+        .replace(/\bdivision\b|\bdivide\b|\bdivided\b/g, "/")
         .replace(/-/g, " - ") // Add spaces around minus for easier splitting
         .replace(/\+/g, " + ")
         .replace(/\*/g, " * ")
