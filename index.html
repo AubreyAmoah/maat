@@ -19,25 +19,31 @@
         </button>
 
         <div class="manual-input hidden">
-         <textarea name="" id="" cols="40" rows="10"></textarea>
-         <p>Press Enter Key When Done</p> 
+          <textarea name="" id="" cols="40" rows="10"></textarea>
+          <p>Press Enter Key When Done</p>
         </div>
       </div>
 
-      
-
       <div class="side-nav">
-        <button class="item">
-          <div class="item-icon"><i class="fa-solid fa-gear"></i></div>
-          <div class="item-text"><p>Voice Settings</p></div>
+        <button class="item" id="voice-setting">
+          <div class="item-icon" id="voice-setting-icon">
+            <i class="fa-solid fa-gear"></i>
+          </div>
+          <div class="item-text" id="voice-setting-text">
+            <p>Voice Settings</p>
+          </div>
         </button>
-        <button class="item">
-          <div class="item-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-          <div class="item-text"><p>Magnifier</p></div>
+        <button class="item" id="magnifier">
+          <div class="item-icon" id="magnifier-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <div class="item-text" id="magnifier-text"><p>Magnifier</p></div>
         </button>
-        <button class="item">
-          <div class="item-icon"><i class="fa-solid fa-ear-deaf"></i></div>
-          <div class="item-text"><p>Deaf Mode</p></div>
+        <button class="item" id="deafmode">
+          <div class="item-icon" id="deafmode-icon">
+            <i class="fa-solid fa-ear-deaf"></i>
+          </div>
+          <div class="item-text" id="deafmode-text"><p>Deaf Mode</p></div>
         </button>
       </div>
 
@@ -46,6 +52,61 @@
   </body>
 
   <script>
+    const voiceSettingBtn = document.getElementById("voice-setting");
+    const voiceSettingBtnText = document.getElementById("voice-setting-text");
+    const voiceSettingBtnIcon = document.getElementById("voice-setting-icon");
 
+    const magnifierBtn = document.getElementById("magnifier");
+    const magnifierBtnText = document.getElementById("magnifier-text");
+    const magnifierBtnIcon = document.getElementById("magnifier-icon");
+
+    const deafModeBtn = document.getElementById("deafmode");
+    const deafModeBtnText = document.getElementById("deafmode-text");
+    const deafModeBtnIcon = document.getElementById("deafmode-icon");
+
+    const isFocused = "focus";
+
+    voiceSettingBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (voiceSettingBtn.classList.contains(`${isFocused}`)) {
+        voiceSettingBtn.classList.remove(`${isFocused}`);
+        voiceSettingBtnText.classList.remove("hidden");
+        voiceSettingBtnIcon.classList.remove("toggled");
+      } else {
+        voiceSettingBtn.classList.add(`${isFocused}`);
+        voiceSettingBtnText.classList.add("hidden");
+        voiceSettingBtnIcon.classList.add("toggled");
+      }
+    });
+
+    magnifierBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (magnifierBtn.classList.contains(`${isFocused}`)) {
+        magnifierBtn.classList.remove(`${isFocused}`);
+        magnifierBtn.classList.remove(`${isFocused}`);
+        magnifierBtnText.classList.remove("hidden");
+        magnifierBtnIcon.classList.remove("toggled");
+      } else {
+        magnifierBtn.classList.add(`${isFocused}`);
+        magnifierBtn.classList.add(`${isFocused}`);
+        magnifierBtnText.classList.add("hidden");
+        magnifierBtnIcon.classList.add("toggled");
+      }
+    });
+
+    deafModeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (deafModeBtn.classList.contains(`${isFocused}`)) {
+        deafModeBtn.classList.remove(`${isFocused}`);
+        deafModeBtn.classList.remove(`${isFocused}`);
+        deafModeBtnText.classList.remove("hidden");
+        deafModeBtnIcon.classList.remove("toggled");
+      } else {
+        deafModeBtn.classList.add(`${isFocused}`);
+        deafModeBtn.classList.add(`${isFocused}`);
+        deafModeBtnText.classList.add("hidden");
+        deafModeBtnIcon.classList.add("toggled");
+      }
+    });
   </script>
 </html>
