@@ -47,12 +47,12 @@
         </button>
       </div>
 
-      <div class="workspace" id="workspace">
+      <div class="workspace" id="workspace" tabindex="0">
         <h1>Question</h1>
         <p id="question"></p>
 
         <h1>Answer</h1>
-        <p>Your Answers should appear here</p>
+        <p id="answer">Your Answers should appear here</p>
       </div>
 
       <div class="setting hidden" id="setting">
@@ -111,8 +111,96 @@
     const setting = document.getElementById("setting");
 
     const question = document.getElementById("question");
+    const answer = document.getElementById("answer");
     const prompt = document.getElementById("prompt");
     const workspace = document.getElementById("workspace");
+    const promptQuestion = prompt.value;
+
+    const regex =
+      /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b/gi;
+
+    function calculateFromStatement(statement) {
+      // Convert statement to lowercase to handle case insensitivity
+      statement = statement.toLowerCase();
+
+      // Replace words with corresponding operators
+      statement = statement
+        .replace(
+          /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\baddition\b| \bfrom\b/g,
+          "+"
+        )
+        .replace(/\bminus\b|\bsubtract\b|\bsubtraction\b|\bnegative\b/g, "-")
+        .replace(
+          /\bproduct\b|\bproduct of\b|\bproductof\b|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b/g,
+          "*"
+        )
+        .replace(/\bdivision\b|\bdivide\b|\bdivided\b/g, '/')
+        .replace(/-/g, " - ") // Add spaces around minus for easier splitting
+        .replace(/\+/g, " + ")
+        .replace(/\*/g, " * ")
+        .replace(/\//g, " / ");
+
+      // Split the statement into tokens
+      let tokens = statement.split(" ").filter((token) => token);
+
+      // Convert numbers and handle negative numbers
+      let numbers = [];
+      let operations = [];
+
+      for (let i = 0; i < tokens.length; i++) {
+        if (!isNaN(tokens[i])) {
+          numbers.push(parseFloat(tokens[i]));
+        } else if (tokens[i] === "-") {
+          if (i === 0 || (tokens[i - 1] && isNaN(tokens[i - 1]))) {
+            // This is a negative number
+            numbers.push(parseFloat(tokens[i] + tokens[i + 1]));
+            i++;
+          } else {
+            operations.push(tokens[i]);
+          }
+        } else if (["+", "*", "/"].includes(tokens[i])) {
+          operations.push(tokens[i]);
+        }
+      }
+
+      // Check for NaN or undefined numbers and return an error if found
+      if (numbers.some((num) => isNaN(num) || num === undefined)) {
+        return "Invalid numbers in the statement.";
+      }
+
+      // Check for empty operations or mismatch in numbers and operations length
+      if (operations.length === 0 || numbers.length !== operations.length + 1) {
+        return "Invalid operations in the statement.";
+      }
+
+      // Perform the calculation
+      let result = numbers[0];
+      for (let i = 0; i < operations.length; i++) {
+        switch (operations[i]) {
+          case "+":
+            result += numbers[i + 1];
+            break;
+          case "-":
+            result -= numbers[i + 1];
+            break;
+          case "*":
+            result *= numbers[i + 1];
+            break;
+          case "/":
+            result /= numbers[i + 1];
+            break;
+          default:
+            return "Invalid operation detected.";
+        }
+      }
+
+      // Check for NaN result and return an error if found
+      if (isNaN(result)) {
+        return "Calculation resulted in an invalid number.";
+      }
+
+      return result;
+    }
 
     document.addEventListener("DOMContentLoaded", (event) => {
       console.log("DOM fully loaded and parsed");
@@ -184,16 +272,38 @@
       }
     });
 
-    prompt.addEventListener("keyup", (e) => {
-      console.log(e);
+    // prompt.addEventListener("keyup", (e) => {
+    //   console.log(e);
+    //   prompt.addEventListener("keydown", (e) => {
+    //     if (e.key === "Enter") {
+    //       e.preventDefault();
+    //       workspace.focus();
+    //     }
+    //   });
+
+    //   if (prompt.value === "") {
+    //     question.innerText = "Any thing you type or say will show up here";
+    //   } else {
+    //     question.innerText = prompt.value;
+    //   }
+    // });
+
+    prompt.addEventListener("keyup", function (e) {
+      // Update the question text based on the prompt value
       if (prompt.value === "") {
         question.innerText = "Any thing you type or say will show up here";
       } else {
         question.innerText = prompt.value;
       }
+    });
 
-      if (e.key == "Enter") {
+    prompt.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
         workspace.focus();
+        const statement = prompt.value;
+        const result = calculateFromStatement(statement);
+        answer.innerText = `Your answer is ${result}`;
       }
     });
   </script>
