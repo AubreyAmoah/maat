@@ -19,10 +19,21 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid #0ea300;
+    border: 2px solid #a30000;
     border-radius: 50%;
-    height: 150px;
-    width: 150px;
+    height: 300px;
+    width: 300px;
+    transition: all .3s ease-in-out;
+}
+
+.microphone:hover {
+    border: none;
+    box-shadow: 0 0 20px 5px #0ea300;
+}
+
+.microphone:focus {
+    border: 2px solid #0ea300;
+    box-shadow: 0 0 10px 5px #0ea300;
 }
 
 .microphone > i {
@@ -30,6 +41,33 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    color: #a30000;
+    font-size: 60px;
+}
+
+.microphone:hover > i {
     color: #0ea300;
-    font-size: 20px;
+}
+
+.microphone:focus > i {
+    color: #0ea300;
+}
+
+.hints{
+    position: absolute;
+    top: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+}
+
+.page{
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    width: 400px;
+    max-height: 600px;
+    overflow: auto;
+    text-align: center;
 }
