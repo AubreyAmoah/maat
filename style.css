@@ -272,10 +272,6 @@ body{
         background: transparent;
     }
 
-    .center {
-        width: 100%;
-    }
-
     .manual-input {
       margin-left: 0;
       width: 100%;
@@ -285,6 +281,20 @@ body{
         border-radius: 0;
         width: 100%;
       }
+}
+
+@media (max-width: 304px) {
+    .microphone {
+        height: 250px;
+        width: 250px;
+    }
+}
+
+@media (max-width: 260px) {
+    .microphone {
+        height: 200px;
+        width: 200px;
+    }
 }
 
 .hidden {
