@@ -33,20 +33,12 @@ keywords.forEach((keyword, i) => {
 });
 hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent any umwanted behavior <br /> Speak now.`;
 
-// microphone.onclick = () => {
-//   synth.cancel();
-//   recognition.start();
-//   textToSpeech("Ready to receive a command.");
-//   prompt.value = "";
-// };
-
-window.onload = () => {
+microphone.onclick = () => {
+  synth.cancel();
   recognition.start();
   textToSpeech("Ready to receive a command.");
   prompt.value = "";
 };
-
-
 
 recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
