@@ -28,13 +28,14 @@ keywords.forEach((keyword, i) => {
 hints.innerHTML = `Try saying these key words: ${keywordsHTML}.`;
 
 microphone.onclick = () => {
+    synth.cancel();
   recognition.start();
   textToSpeech("Ready to receive a command.");
 };
 
 recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
-  textToSpeech(word)
+  prompt.value = word;
   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
