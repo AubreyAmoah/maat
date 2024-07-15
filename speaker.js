@@ -28,10 +28,10 @@ keywords.forEach((keyword, i) => {
 hints.innerHTML = `Try saying these key words: ${keywordsHTML}.`;
 
 microphone.onclick = () => {
-    synth.cancel();
+  synth.cancel();
   recognition.start();
   textToSpeech("Ready to receive a command.");
-  prompt.value = ""
+  prompt.value = "";
 };
 
 recognition.onresult = (event) => {
@@ -45,9 +45,10 @@ recognition.onspeechend = () => {
   recognition.stop();
   workspace.focus();
   const statement = prompt.value;
+  hints.innerText = statement;
   const result = calculateFromStatement(statement);
   answer.innerText = `Your answer is ${result}`;
-  textToSpeech(answer.innerText)
+  textToSpeech(answer.innerText);
 };
 
 // recognition.onnomatch = (event) => {
