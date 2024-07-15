@@ -141,6 +141,7 @@
           "*"
         )
         .replace(/\bdivision\b|\bdivide\b|\bdivided\b/g, "/")
+        .replace(/,/g, "")
         .replace(/-/g, " - ") // Add spaces around minus for easier splitting
         .replace(/\+/g, " + ")
         .replace(/\*/g, " * ")
