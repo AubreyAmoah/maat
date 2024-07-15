@@ -29,9 +29,9 @@ recognition.maxAlternatives = 1;
 
 let keywordsHTML = "";
 keywords.forEach((keyword, i) => {
-  keywordsHTML += `<span> ${keyword} </span>`;
+  keywordsHTML += `<span> ${keyword}, </span>`;
 });
-hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML}. to prevent any umwanted behavior`;
+hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent any umwanted behavior <br /> Say 'hello' to trigger the microphone.`;
 
 microphone.onclick = () => {
   synth.cancel();
@@ -39,6 +39,13 @@ microphone.onclick = () => {
   textToSpeech("Ready to receive a command.");
   prompt.value = "";
 };
+
+if (textToSpeech("hello")) {
+  synth.cancel();
+  recognition.start();
+  textToSpeech("Ready to receive a command.");
+  prompt.value = "";
+}
 
 recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
