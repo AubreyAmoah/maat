@@ -5,7 +5,7 @@ const SpeechGrammarList =
 const SpeechRecognitionEvent =
   window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
-const keywords = ["help", "solve" /* … */];
+const keywords = ["add", "multiply", "divide", "subtract", "percentage" /* … */];
 const grammar = `#JSGF V1.0; grammar keywords; public <keywords> = ${keywords.join(
   " | "
 )};`;
@@ -25,7 +25,7 @@ let keywordsHTML = "";
 keywords.forEach((keyword, i) => {
   keywordsHTML += `<span> ${keyword} </span>`;
 });
-hints.innerHTML = `Try saying these key words: ${keywordsHTML}.`;
+hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML}. to prevent any umwanted behavior`;
 
 microphone.onclick = () => {
   synth.cancel();
@@ -44,15 +44,14 @@ recognition.onresult = (event) => {
 recognition.onspeechend = () => {
   recognition.stop();
   workspace.focus();
-  if(prompt.value !== "" || undefined) {
-    const statement = prompt.value;
+  const statement = prompt.value;
+  if (statement.includes("percentage") || statement.includes("%")) {
+    const result = calculatePercentage(statement);
+    answer.innerText = `Your answer is ${result}`;
+  } else {
     const result = calculateFromStatement(statement);
     answer.innerText = `Your answer is ${result}`;
-    textToSpeech(answer.innerText);
-  } else {
-    answer.innerText = `Your answer is none`;
   }
-
 };
 
 // recognition.onnomatch = (event) => {

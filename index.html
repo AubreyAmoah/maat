@@ -12,7 +12,9 @@
   </head>
   <body>
     <div class="container">
-      <div class="hints" id="hints">Hi, welcome. This is a mathematics assistant.</div>
+      <div class="hints" id="hints">
+        Hi, welcome. This is a mathematics assistant.
+      </div>
       <div class="center">
         <button id="microphone" class="microphone">
           <i class="fa-solid fa-microphone"></i>
@@ -206,6 +208,45 @@
       return result;
     }
 
+    function calculatePercentage(statement) {
+      // Convert statement to lowercase to handle case insensitivity
+      statement = statement.toLowerCase();
+
+      // Replace the word "percent" with "%" for uniformity
+      statement = statement.replace(/percent/g, "%");
+
+      // Regular expression to match percentage expressions like "50% of 200"
+      const percentageRegex = /(\d+)%\s+of\s+(\d+)/g;
+
+      // Find all matches in the statement
+      let matches = [];
+      let match;
+      while ((match = percentageRegex.exec(statement)) !== null) {
+        matches.push({
+          percentage: parseFloat(match[1]),
+          base: parseFloat(match[2]),
+        });
+      }
+
+      // If no matches found, return an error
+      if (matches.length === 0) {
+        return "Error: No valid percentage expressions found in the statement.";
+      }
+
+      // Calculate the results for all matches
+      let results = matches.map(
+        ({ percentage, base }) => (percentage / 100) * base
+      );
+
+      // If there's only one result, return it directly
+      if (results.length === 1) {
+        return results[0];
+      }
+
+      // Otherwise, return an array of results
+      return results;
+    }
+
     document.addEventListener("DOMContentLoaded", (event) => {
       console.log("DOM fully loaded and parsed");
       if (prompt.value === "") {
@@ -307,8 +348,13 @@
         e.preventDefault();
         workspace.focus();
         const statement = prompt.value;
-        const result = calculateFromStatement(statement);
-        answer.innerText = `Your answer is ${result}`;
+        if (statement.includes("percentage") || statement.includes("%")) {
+          const result = calculatePercentage(statement);
+          answer.innerText = `Your answer is ${result}`;
+        } else {
+          const result = calculateFromStatement(statement);
+          answer.innerText = `Your answer is ${result}`;
+        }
       }
     });
   </script>
