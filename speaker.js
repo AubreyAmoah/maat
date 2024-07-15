@@ -13,6 +13,8 @@ const grammar = `#JSGF V1.0; grammar keywords; public <keywords> = ${keywords.jo
 const recognition = new SpeechRecognition();
 const speechRecognitionList = new SpeechGrammarList();
 
+let ans = undefined;
+
 speechRecognitionList.addFromString(grammar, 1);
 
 recognition.grammars = speechRecognitionList;
@@ -38,13 +40,14 @@ recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
   prompt.value = word;
   question.innerText = prompt.value;
+  ans = prompt.value;
   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = () => {
   recognition.stop();
   workspace.focus();
-  const statement = prompt.value;
+  const statement = ans;
   if (statement.includes("percentage") || statement.includes("%")) {
     const result = calculatePercentage(statement);
     answer.innerText = `Your answer is ${result}`;
