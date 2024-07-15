@@ -38,14 +38,6 @@ recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
   prompt.value = word;
   question.innerText = prompt.value;
-  console.log(prompt.value);
-//   console.log(`Confidence: ${event.results[0][0].confidence}`);
-};
-
-recognition.onspeechend = () => {
-    console.log(prompt.value)
-  recognition.stop();
-  workspace.focus();
   const statement = prompt.value;
 
   if (statement.includes("percentage") || statement.includes("%")) {
@@ -55,6 +47,13 @@ recognition.onspeechend = () => {
     const result = calculateFromStatement(statement);
     answer.innerText = `Your answer is ${result}`;
   }
+//   console.log(`Confidence: ${event.results[0][0].confidence}`);
+};
+
+recognition.onspeechend = () => {
+  recognition.stop();
+  workspace.focus();
+
 };
 
 // recognition.onnomatch = (event) => {
