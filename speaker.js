@@ -50,6 +50,7 @@ recognition.onresult = (event) => {
 };
 
 recognition.onspeechend = () => {
+    console.log(recognizedText)
   recognition.stop();
   workspace.focus();
   const statement = recognizedText;
