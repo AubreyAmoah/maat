@@ -40,12 +40,13 @@ hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent
 //   prompt.value = "";
 // };
 
-if (textToSpeech("hello")) {
-  synth.cancel();
+window.onload = () => {
   recognition.start();
   textToSpeech("Ready to receive a command.");
   prompt.value = "";
-}
+};
+
+
 
 recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
