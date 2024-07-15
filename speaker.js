@@ -54,12 +54,12 @@ recognition.onresult = (event) => {
     const result = calculateFromStatement(statement);
     answer.innerText = `Your answer is ${result}`;
   }
-  workspace.focus();
   //   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = () => {
   recognition.stop();
+  workspace.focus();
 };
 
 // recognition.onnomatch = (event) => {
