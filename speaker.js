@@ -44,10 +44,15 @@ recognition.onresult = (event) => {
 recognition.onspeechend = () => {
   recognition.stop();
   workspace.focus();
-  const statement = question.innerText;
-  const result = calculateFromStatement(statement);
-  answer.innerText = `Your answer is ${result}`;
-  textToSpeech(answer.innerText);
+  if(prompt.value !== "" || undefined) {
+    const statement = prompt.value;
+    const result = calculateFromStatement(statement);
+    answer.innerText = `Your answer is ${result}`;
+    textToSpeech(answer.innerText);
+  } else {
+    answer.innerText = `Your answer is none`;
+  }
+
 };
 
 // recognition.onnomatch = (event) => {
