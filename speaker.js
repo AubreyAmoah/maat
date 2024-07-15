@@ -5,7 +5,13 @@ const SpeechGrammarList =
 const SpeechRecognitionEvent =
   window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
-const keywords = ["add", "multiply", "divide", "subtract", "percentage" /* … */];
+const keywords = [
+  "add",
+  "multiply",
+  "divide",
+  "subtract",
+  "percentage" /* … */,
+];
 const grammar = `#JSGF V1.0; grammar keywords; public <keywords> = ${keywords.join(
   " | "
 )};`;
@@ -34,11 +40,19 @@ microphone.onclick = () => {
   prompt.value = "";
 };
 
+let recognizedText = "";
+
 recognition.onresult = (event) => {
-  const word = event.results[0][0].transcript;
-  prompt.value = word;
+  recognizedText = event.results[0][0].transcript;
+  prompt.value = recognizedText;
   question.innerText = prompt.value;
-  const statement = prompt.value;
+  //   console.log(`Confidence: ${event.results[0][0].confidence}`);
+};
+
+recognition.onspeechend = () => {
+  recognition.stop();
+  workspace.focus();
+  const statement = recognizedText;
 
   if (statement.includes("percentage") || statement.includes("%")) {
     const result = calculatePercentage(statement);
@@ -47,13 +61,6 @@ recognition.onresult = (event) => {
     const result = calculateFromStatement(statement);
     answer.innerText = `Your answer is ${result}`;
   }
-//   console.log(`Confidence: ${event.results[0][0].confidence}`);
-};
-
-recognition.onspeechend = () => {
-  recognition.stop();
-  workspace.focus();
-
 };
 
 // recognition.onnomatch = (event) => {
