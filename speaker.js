@@ -45,9 +45,9 @@ recognition.onspeechend = () => {
   recognition.stop();
   workspace.focus();
   const statement = prompt.value;
-  
+  hints.innerText = statement;
   const result = calculateFromStatement(statement);
-  hints.innerText = result;
+  
   answer.innerText = `Your answer is ${result}`;
   textToSpeech(answer.innerText);
 };
