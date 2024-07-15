@@ -31,7 +31,7 @@ let keywordsHTML = "";
 keywords.forEach((keyword, i) => {
   keywordsHTML += `<span> ${keyword}, </span>`;
 });
-hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent any umwanted behavior <br /> Say 'hello' to trigger the microphone.`;
+hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent any umwanted behavior <br /> Speak now.`;
 
 // microphone.onclick = () => {
 //   synth.cancel();
