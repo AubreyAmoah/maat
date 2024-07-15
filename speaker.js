@@ -38,10 +38,11 @@ recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
   prompt.value = word;
   question.innerText = prompt.value;
-  console.log(`Confidence: ${event.results[0][0].confidence}`);
+//   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = () => {
+    console.log('end')
   recognition.stop();
   workspace.focus();
   const statement = prompt.value;
