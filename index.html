@@ -107,6 +107,7 @@
     const deafModeBtnIcon = document.getElementById("deafmode-icon");
 
     const isFocused = "focus";
+    let isDeafMode = "false";
 
     const setting = document.getElementById("setting");
 
@@ -264,6 +265,7 @@
         deafModeBtn.classList.add(`${isFocused}`);
         deafModeBtnText.classList.add("hidden");
         deafModeBtnIcon.classList.add("toggled");
+        isDeafMode = true;
 
         if (!microphone.classList.contains("hidden")) {
           microphone.classList.add("hidden");
@@ -311,4 +313,5 @@
     });
   </script>
   <script src="./reader.js"></script>
+  <script src="./speaker.js"></script>
 </html>
