@@ -27,9 +27,9 @@ keywords.forEach((keyword, i) => {
 });
 hints.innerHTML = `Try saying these key words: ${keywordsHTML}.`;
 
-window.onload = () => {
+microphone.onclick = () => {
   recognition.start();
-  console.log("Ready to receive a command.");
+  textToSpeech("Ready to receive a command.");
 };
 
 recognition.onresult = (event) => {
@@ -42,9 +42,9 @@ recognition.onspeechend = () => {
   recognition.stop();
 };
 
-recognition.onnomatch = (event) => {
-  textToSpeech("I didn't recognize that color.");
-};
+// recognition.onnomatch = (event) => {
+//   textToSpeech("I didn't recognize that color.");
+// };
 
 recognition.onerror = (event) => {
   textToSpeech(`Error occurred in recognition: ${event.error}`);
