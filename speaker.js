@@ -67,6 +67,7 @@ recognition.onresult = (event) => {
 recognition.onspeechend = () => {
   recognition.stop();
   workspace.focus();
+  textToSpeech(answer.innerText);
 };
 
 // recognition.onnomatch = (event) => {
