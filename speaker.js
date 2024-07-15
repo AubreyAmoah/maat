@@ -38,15 +38,16 @@ recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;
   prompt.value = word;
   question.innerText = prompt.value;
+  console.log(prompt.value);
 //   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = () => {
-    console.log('end')
+    console.log(prompt.value)
   recognition.stop();
   workspace.focus();
   const statement = prompt.value;
-  console.log(statement)
+
   if (statement.includes("percentage") || statement.includes("%")) {
     const result = calculatePercentage(statement);
     answer.innerText = `Your answer is ${result}`;
