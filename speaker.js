@@ -41,16 +41,18 @@ microphone.onclick = () => {
 };
 
 let recognizedText = "";
+console.log(recognizedText)
 
 recognition.onresult = (event) => {
   recognizedText = event.results[0][0].transcript;
   prompt.value = recognizedText;
   question.innerText = prompt.value;
+  console.log(recognizedText);
   //   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = () => {
-    console.log(recognizedText)
+  console.log(recognizedText);
   recognition.stop();
   workspace.focus();
   const statement = recognizedText;
