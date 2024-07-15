@@ -40,23 +40,13 @@ microphone.onclick = () => {
   prompt.value = "";
 };
 
-let recognizedText = "";
-console.log(recognizedText)
-
 recognition.onresult = (event) => {
-  recognizedText = event.results[0][0].transcript;
-  prompt.value = recognizedText;
+  const word = event.results[0][0].transcript;
+  prompt.value = word;
   question.innerText = prompt.value;
-  console.log(recognizedText);
-  //   console.log(`Confidence: ${event.results[0][0].confidence}`);
-};
 
-recognition.onspeechend = () => {
-  console.log(recognizedText);
-  recognition.stop();
-  workspace.focus();
-  const statement = recognizedText;
-
+  const statement = prompt.value;
+  console.log(statement);
   if (statement.includes("percentage") || statement.includes("%")) {
     const result = calculatePercentage(statement);
     answer.innerText = `Your answer is ${result}`;
@@ -64,6 +54,12 @@ recognition.onspeechend = () => {
     const result = calculateFromStatement(statement);
     answer.innerText = `Your answer is ${result}`;
   }
+  //   console.log(`Confidence: ${event.results[0][0].confidence}`);
+};
+
+recognition.onspeechend = () => {
+  recognition.stop();
+  workspace.focus();
 };
 
 // recognition.onnomatch = (event) => {
