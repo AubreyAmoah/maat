@@ -1,44 +1,11 @@
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-const SpeechGrammarList =
-  window.SpeechGrammarList || window.webkitSpeechGrammarList;
-const SpeechRecognitionEvent =
-  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
-const keywords = [
-  "add",
-  "multiply",
-  "divide",
-  "subtract",
-  "percentage" /* … */,
-];
-const grammar = `#JSGF V1.0; grammar keywords; public <keywords> = ${keywords.join(
-  " | "
-)};`;
-
-const recognition = new SpeechRecognition();
-const speechRecognitionList = new SpeechGrammarList();
-
-speechRecognitionList.addFromString(grammar, 1);
-
-recognition.grammars = speechRecognitionList;
-recognition.continuous = false;
-recognition.lang = "en-US";
-recognition.interimResults = false;
-recognition.maxAlternatives = 1;
-
-let keywordsHTML = "";
-keywords.forEach((keyword, i) => {
-  keywordsHTML += `<span> ${keyword}, </span>`;
-});
 hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent any umwanted behavior.`;
 
-microphone.onclick = () => {
-  synth.cancel();
-  recognition.start();
-  textToSpeech("Ready to receive a command.");
-  prompt.value = "";
-};
+// microphone.onclick = () => {
+//   synth.cancel();
+  
+//   textToSpeech("Ready to receive a command.");
+//   prompt.value = "";
+// };
 
 recognition.onresult = (event) => {
   const word = event.results[0][0].transcript;

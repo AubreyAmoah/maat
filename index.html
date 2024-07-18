@@ -94,6 +94,39 @@
 
   <script>
     const synth = window.speechSynthesis;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechGrammarList =
+      window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    const SpeechRecognitionEvent =
+      window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
+    const keywords = [
+      "add",
+      "multiply",
+      "divide",
+      "subtract",
+      "percentage" /* … */,
+    ];
+    const grammar = `#JSGF V1.0; grammar keywords; public <keywords> = ${keywords.join(
+      " | "
+    )};`;
+
+    const recognition = new SpeechRecognition();
+    const speechRecognitionList = new SpeechGrammarList();
+
+    speechRecognitionList.addFromString(grammar, 1);
+
+    recognition.grammars = speechRecognitionList;
+    recognition.continuous = false;
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    let keywordsHTML = "";
+    keywords.forEach((keyword, i) => {
+      keywordsHTML += `<span> ${keyword}, </span>`;
+    });
     const microphone = document.getElementById("microphone");
     const textInput = document.getElementById("text-input");
 
@@ -122,6 +155,7 @@
 
     const regex =
       /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
+    recognition.start();
   </script>
   <script src="./basicmath.js"></script>
   <script src="./implemantaion.js"></script>
