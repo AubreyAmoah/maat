@@ -295,12 +295,11 @@ body {
 
   .manual-input {
     margin-left: 0;
-    width: 100%;
   }
 
   .manual-input > textarea {
     border-radius: 0;
-    width: 100%;
+    width: 100vw;
   }
 }
 
