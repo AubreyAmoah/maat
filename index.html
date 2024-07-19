@@ -101,6 +101,27 @@
     const SpeechRecognitionEvent =
       window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
+    const keyword = "hello";
+    let listeningForKeyword = true;
+
+    const keywordRecognition = new webkitSpeechRecognition();
+    keywordRecognition.continuous = true;
+    keywordRecognition.interimResults = true;
+    keywordRecognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0].transcript)
+        .join("")
+        .toLowerCase();
+
+      if (transcript.includes(keyword) && listeningForKeyword) {
+        listeningForKeyword = false;
+        keywordRecognition.stop();
+        recognition.start();
+      }
+    };
+
+    keywordRecognition.start();
+
     const keywords = [
       "add",
       "multiply",
@@ -155,7 +176,6 @@
 
     const regex =
       /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
-    recognition.start();
   </script>
   <script src="./basicmath.js"></script>
   <script src="./implemantaion.js"></script>
