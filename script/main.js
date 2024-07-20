@@ -168,15 +168,77 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     mic.onclick = () => {
       if (user) {
-        textToSpeech(`Hello ${user}, what can i do for you?`);
+        synth.cancel();
+        textToSpeech(`Hello ${user}, what can i do for you?`, () => {
+          recognition.start();
+        });
 
         isBusy = false;
+
+        recognition.onresult = (event) => {
+          const word = event.results[0][0].transcript;
+          prompt.value = word;
+          question.innerText = prompt.value;
+
+          const statement = prompt.value;
+          if (statement.includes("percentage") || statement.includes("%")) {
+            const result = calculatePercentage(statement);
+            answer.innerText = `Your answer is ${result}`;
+            textToSpeech(answer.innerText);
+          } else if (statement.includes("change my name")) {
+            recognition.stop();
+            textToSpeech(`What is your new name?`, () => {
+              recognition.start();
+            });
+            recognition.onresult = (event) => {
+              const word = event.results[0][0].transcript;
+              window.localStorage.setItem("user", word);
+              textToSpeech(`Your new name is ${word}`, () => {
+                isBusy = false;
+              });
+            };
+
+            recognition.onspeechend = () => {
+              if (isBusy) {
+                recognition.start();
+              }
+            };
+
+            recognition.onerror = (event) => {
+              textToSpeech(
+                "I cannot understand you. Please give me a valid name",
+                () => {
+                  recognition.start();
+                }
+              );
+            };
+          } else {
+            const result = calculateFromStatement(statement);
+            answer.innerText = `Your answer is ${result}`;
+            textToSpeech(answer.innerText);
+          }
+        };
+
+        recognition.onspeechend = () => {
+          if (isBusy) {
+            recognition.start();
+          }
+        };
+
+        recognition.onerror = (event) => {
+          textToSpeech(
+            "I cannot understand you. Please give me a valid name",
+            () => {
+              recognition.start();
+            }
+          );
+        };
       } else {
+        synth.cancel();
         isBusy = true;
 
         textToSpeech("Hello, tell me your name please.", () => {
           recognition.start();
-          console.log("works");
         });
 
         recognition.onresult = (event) => {
