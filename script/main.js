@@ -1,5 +1,4 @@
 import { handleClickDeaf } from "./deafModeHandler.mjs";
-import { textToSpeech } from "./handleTextToSpech.mjs";
 import { handleClickMagnify } from "./magnifyHandler.mjs";
 import { handleKeyDown, handleKeyUp } from "./promptHandler.mjs";
 import { handleClickVoice } from "./voiceSettingHandler.mjs";
@@ -93,62 +92,68 @@ function populateVoiceList() {
 
 populateVoiceList();
 
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
+
 const regex =
   /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
 
 const hint =
   (hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to initiate chat.`);
-const readHints = () => {
-  textToSpeech(hint, voices, synth, voiceSelect);
-};
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
-  }
   console.log("DOM fully loaded and parsed");
+  const textToSpeech = (element) => {
+    const utterThis = new SpeechSynthesisUtterance(element);
+    const selectedOption =
+      voiceSelect.selectedOptions[0].getAttribute("data-name");
+    for (const voice of voices) {
+      if (voice.name === selectedOption) {
+        utterThis.voice = voice;
+      }
+    }
+    utterThis.pitch = pitch.value;
+    utterThis.rate = rate.value;
+    synth.speak(utterThis);
+
+    utterThis.onpause = (event) => {
+      const char = event.utterance.text.charAt(event.charIndex);
+      console.log(
+        `Speech paused at character ${event.charIndex} of "${event.utterance.text}", which is "${char}".`
+      );
+    };
+  };
+
+  const readHints = () => {
+    textToSpeech(hint);
+  };
   const loadingScreen = document.getElementById("loading-screen");
 
   setTimeout(() => {
     loadingScreen.style.display = "none";
-  }, 10000);
+  }, 50000);
 
   if (user) {
-    textToSpeech(
-      `Welcome back ${user}, glad to have you back`,
-      voices,
-      synth,
-      voiceSelect
-    );
+    textToSpeech(`Welcome, please tell me your name`);
+    textToSpeech(`Welcome back ${user}, glad to have you back`);
   } else {
     isBusy = true;
-    textToSpeech(
-      `Welcome, please tell me your name.`,
-      voices,
-      synth,
-      voiceSelect
-    );
 
     recognition.start();
 
     recognition.onresult = (event) => {
       const word = event.results[0][0].transcript;
       window.localStorage.setItem("user", word);
-      textToSpeech(`your name is ${user}`, voices, synth, voiceSelect);
+      textToSpeech(`your name is ${user}`);
     };
 
-    // recognition.onspeechend = () => {
-    //   recognition.stop();
-    // };
+    recognition.onspeechend = () => {
+      recognition.stop();
+    };
 
     recognition.onerror = (event) => {
-      textToSpeech(
-        `I cannot undersatnd you. Please give me a valid name`,
-        voices,
-        synth,
-        voiceSelect
-      );
-      recognition.start();
+      textToSpeech(`I cannot undersatnd you. Please give me a valid name`);
     };
   }
 
