@@ -157,7 +157,7 @@ const regex =
   /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
 
 const hint =
-  (hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to initiate chat.`);
+  (hints.innerHTML = `Tap on the microphone at the center of the screen to initiate chat.<br /> On first load you will be asked for your name.<br /> please wait for the beep before speaking to the app.`);
 const loadingScreen = document.getElementById("loading-screen");
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const result = calculatePercentage(statement);
             answer.innerText = `Your answer is ${result}`;
             textToSpeech(answer.innerText);
-          } 
+          }
           // else if (statement.includes("change my name")) {
           //   recognition.stop();
           //   textToSpeech(`What is your new name?`, () => {
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
           //       }
           //     );
           //   };
-          // } 
+          // }
           else {
             const result = calculateFromStatement(statement);
             answer.innerText = `Your answer is ${result}`;
