@@ -227,18 +227,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         };
 
         recognition.onspeechend = () => {
-          if (isBusy) {
-            recognition.start();
-          }
+          workspace.focus();
         };
 
         recognition.onerror = (event) => {
-          textToSpeech(
-            "I cannot understand you. Please give me a valid name",
-            () => {
-              recognition.start();
-            }
-          );
+          textToSpeech(`Error occurred in recognition: ${event.error}`);
         };
       } else {
         synth.cancel();
