@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MAAT</title>
+    <style>
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        z-index: 1000;
+      }
+    </style>
+
     <link rel="stylesheet" href="style.css" />
     <script
       src="https://kit.fontawesome.com/d4fd77631c.js"
@@ -90,95 +106,8 @@
         <select></select>
       </div>
     </div>
+
+    <div id="loading-screen">Loading...</div>
   </body>
-
-  <script>
-    const synth = window.speechSynthesis;
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    const SpeechGrammarList =
-      window.SpeechGrammarList || window.webkitSpeechGrammarList;
-    const SpeechRecognitionEvent =
-      window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
-    const keyword = "hello";
-    let listeningForKeyword = true;
-
-    const keywordRecognition = new webkitSpeechRecognition();
-    keywordRecognition.continuous = true;
-    keywordRecognition.interimResults = true;
-    keywordRecognition.onresult = (event) => {
-      const transcript = Array.from(event.results)
-        .map((result) => result[0].transcript)
-        .join("")
-        .toLowerCase();
-
-      if (transcript.includes(keyword) && listeningForKeyword) {
-        listeningForKeyword = false;
-        keywordRecognition.stop();
-        recognition.start();
-      }
-    };
-
-    keywordRecognition.start();
-
-    const keywords = [
-      "add",
-      "multiply",
-      "divide",
-      "subtract",
-      "percentage" /* … */,
-    ];
-    const grammar = `#JSGF V1.0; grammar keywords; public <keywords> = ${keywords.join(
-      " | "
-    )};`;
-
-    const recognition = new SpeechRecognition();
-    const speechRecognitionList = new SpeechGrammarList();
-
-    speechRecognitionList.addFromString(grammar, 1);
-
-    recognition.grammars = speechRecognitionList;
-    recognition.continuous = false;
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    let keywordsHTML = "";
-    keywords.forEach((keyword, i) => {
-      keywordsHTML += `<span> ${keyword}, </span>`;
-    });
-    const microphone = document.getElementById("microphone");
-    const textInput = document.getElementById("text-input");
-
-    const voiceSettingBtn = document.getElementById("voice-setting");
-    const voiceSettingBtnText = document.getElementById("voice-setting-text");
-    const voiceSettingBtnIcon = document.getElementById("voice-setting-icon");
-
-    const magnifierBtn = document.getElementById("magnifier");
-    const magnifierBtnText = document.getElementById("magnifier-text");
-    const magnifierBtnIcon = document.getElementById("magnifier-icon");
-
-    const deafModeBtn = document.getElementById("deafmode");
-    const deafModeBtnText = document.getElementById("deafmode-text");
-    const deafModeBtnIcon = document.getElementById("deafmode-icon");
-
-    const isFocused = "focus";
-    let DeafModeOff = true;
-
-    const setting = document.getElementById("setting");
-
-    const question = document.getElementById("question");
-    const answer = document.getElementById("answer");
-    const prompt = document.getElementById("prompt");
-    const workspace = document.getElementById("workspace");
-    const promptQuestion = prompt.value;
-
-    const regex =
-      /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
-  </script>
-  <script src="./basicmath.js"></script>
-  <script src="./implemantaion.js"></script>
-  <script src="./reader.js"></script>
-  <script src="./speaker.js"></script>
+  <script type="module" src="./script/main.js"></script>
 </html>

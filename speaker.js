@@ -1,5 +1,3 @@
-hints.innerHTML = `Try remember to use keywords like: ${keywordsHTML} to prevent any umwanted behavior.`;
-
 // microphone.onclick = () => {
 //   synth.cancel();
   
