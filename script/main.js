@@ -166,53 +166,50 @@ document.addEventListener("DOMContentLoaded", (event) => {
   setTimeout(() => {
     loadingScreen.style.display = "none";
 
-    // const readHints = () => {
-    //   textToSpeech(hint);
-    // };
+    mic.onclick = () => {
+      if (user) {
+        textToSpeech(`Hello ${user}, what can i do for you?`);
 
-    if (user) {
-      // textToSpeech(`Welcome, please tell me your name`);
-      // textToSpeech(`Welcome back ${user}, glad to have you back`);
+        isBusy = false;
+      } else {
+        isBusy = true;
 
-      isBusy = false;
-    } else {
-      isBusy = true;
-
-      textToSpeech("Hello, tell me your name please.", () => {
-        recognition.start();
-        console.log("works");
-      });
-
-      recognition.onresult = (event) => {
-        const word = event.results[0][0].transcript;
-        window.localStorage.setItem("user", word);
-        textToSpeech(`Your name is ${word}`, () => {
-          isBusy = false;
-        });
-      };
-
-      recognition.onspeechend = () => {
-        if (isBusy) {
+        textToSpeech("Hello, tell me your name please.", () => {
           recognition.start();
-        }
-      };
+          console.log("works");
+        });
 
-      recognition.onerror = (event) => {
-        textToSpeech(
-          "I cannot understand you. Please give me a valid name",
-          () => {
+        recognition.onresult = (event) => {
+          const word = event.results[0][0].transcript;
+          window.localStorage.setItem("user", word);
+          textToSpeech(`Your name is ${word}`, () => {
+            isBusy = false;
+          });
+        };
+
+        recognition.onspeechend = () => {
+          if (isBusy) {
             recognition.start();
           }
-        );
-      };
-    }
+        };
 
-    if (isBusy === false) {
-      setTimeout(() => {
-        readHints;
-        setInterval(readHints, 60000); // 60 seconds interval
-      }, 2000);
-    }
+        recognition.onerror = (event) => {
+          textToSpeech(
+            "I cannot understand you. Please give me a valid name",
+            () => {
+              recognition.start();
+            }
+          );
+        };
+      }
+    };
+
+    // if (isBusy === false) {
+    //   setTimeout(() => {
+    //     readHints;
+    //     setInterval(readHints, 60000); // 60 seconds interval
+    //   }, 2000);
+    // }
 
     if (prompt.value === "") {
       question.innerText = "Any thing you type or say will show up here";
