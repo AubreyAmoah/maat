@@ -2,6 +2,11 @@ import { handleClickDeaf } from "./deafModeHandler.mjs";
 import { handleClickMagnify } from "./magnifyHandler.mjs";
 import { handleKeyDown, handleKeyUp } from "./promptHandler.mjs";
 import { handleClickVoice } from "./voiceSettingHandler.mjs";
+import {
+  calculateFromStatement,
+  calculatePercentage,
+  solveEquation,
+} from "./arithmetic.mjs";
 
 const mic = document.getElementById("microphone");
 const textInput = document.getElementById("text-input");
@@ -190,36 +195,34 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const result = calculatePercentage(statement);
             answer.innerText = `Your answer is ${result}`;
             textToSpeech(answer.innerText);
-          }
-          // else if (statement.includes("change my name")) {
-          //   recognition.stop();
-          //   textToSpeech(`What is your new name?`, () => {
-          //     recognition.start();
-          //   });
-          //   recognition.onresult = (event) => {
-          //     const word = event.results[0][0].transcript;
-          //     window.localStorage.setItem("user", word);
-          //     textToSpeech(`Your new name is ${word}`, () => {
-          //       isBusy = false;
-          //     });
-          //   };
+          } else if (statement.includes("change my name")) {
+            recognition.stop();
+            textToSpeech(`What is your new name?`, () => {
+              recognition.start();
+            });
+            recognition.onresult = (event) => {
+              const word = event.results[0][0].transcript;
+              window.localStorage.setItem("user", word);
+              textToSpeech(`Your new name is ${word}`, () => {
+                isBusy = false;
+              });
+            };
 
-          //   recognition.onspeechend = () => {
-          //     if (isBusy) {
-          //       recognition.start();
-          //     }
-          //   };
+            recognition.onspeechend = () => {
+              if (isBusy) {
+                recognition.start();
+              }
+            };
 
-          //   recognition.onerror = (event) => {
-          //     textToSpeech(
-          //       "I cannot understand you. Please give me a valid name",
-          //       () => {
-          //         recognition.start();
-          //       }
-          //     );
-          //   };
-          // }
-          else {
+            recognition.onerror = (event) => {
+              textToSpeech(
+                "I cannot understand you. Please give me a valid name",
+                () => {
+                  recognition.start();
+                }
+              );
+            };
+          } else {
             const result = calculateFromStatement(statement);
             answer.innerText = `Your answer is ${result}`;
             textToSpeech(answer.innerText);
