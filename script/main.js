@@ -104,100 +104,101 @@ const hint =
 
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
-  const textToSpeech = (element) => {
-    const utterThis = new SpeechSynthesisUtterance(element);
-    const selectedOption =
-      voiceSelect.selectedOptions[0].getAttribute("data-name");
-    for (const voice of voices) {
-      if (voice.name === selectedOption) {
-        utterThis.voice = voice;
-      }
-    }
-    utterThis.pitch = pitch.value;
-    utterThis.rate = rate.value;
-    synth.speak(utterThis);
-
-    utterThis.onpause = (event) => {
-      const char = event.utterance.text.charAt(event.charIndex);
-      console.log(
-        `Speech paused at character ${event.charIndex} of "${event.utterance.text}", which is "${char}".`
-      );
-    };
-  };
-
-  const readHints = () => {
-    textToSpeech(hint);
-  };
   const loadingScreen = document.getElementById("loading-screen");
 
   setTimeout(() => {
     loadingScreen.style.display = "none";
-  }, 50000);
 
-  if (user) {
-    textToSpeech(`Welcome, please tell me your name`);
-    textToSpeech(`Welcome back ${user}, glad to have you back`);
-  } else {
-    isBusy = true;
+    const textToSpeech = (element) => {
+      const utterThis = new SpeechSynthesisUtterance(element);
+      const selectedOption =
+        voiceSelect.selectedOptions[0].getAttribute("data-name");
+      for (const voice of voices) {
+        if (voice.name === selectedOption) {
+          utterThis.voice = voice;
+        }
+      }
+      utterThis.pitch = pitch.value;
+      utterThis.rate = rate.value;
+      synth.speak(utterThis);
 
-    recognition.start();
-
-    recognition.onresult = (event) => {
-      const word = event.results[0][0].transcript;
-      window.localStorage.setItem("user", word);
-      textToSpeech(`your name is ${user}`);
+      utterThis.onpause = (event) => {
+        const char = event.utterance.text.charAt(event.charIndex);
+        console.log(
+          `Speech paused at character ${event.charIndex} of "${event.utterance.text}", which is "${char}".`
+        );
+      };
     };
 
-    recognition.onspeechend = () => {
-      recognition.stop();
+    const readHints = () => {
+      textToSpeech(hint);
     };
 
-    recognition.onerror = (event) => {
-      textToSpeech(`I cannot undersatnd you. Please give me a valid name`);
-    };
-  }
+    if (user) {
+      textToSpeech(`Welcome, please tell me your name`);
+      textToSpeech(`Welcome back ${user}, glad to have you back`);
+    } else {
+      isBusy = true;
 
-  setTimeout(() => {
-    readHints;
-    setInterval(readHints, 30000); // 30 seconds interval
-  }, 10000);
+      recognition.start();
 
-  if (prompt.value === "") {
-    question.innerText = "Any thing you type or say will show up here";
-  } else {
-    question.innerText = prompt.value;
-  }
+      recognition.onresult = (event) => {
+        const word = event.results[0][0].transcript;
+        window.localStorage.setItem("user", word);
+        textToSpeech(`your name is ${user}`);
+      };
 
-  //prompt handler
-  handleKeyUp(prompt, question);
-  handleKeyDown(prompt, answer, workspace);
+      recognition.onspeechend = () => {
+        recognition.stop();
+      };
 
-  //voice settings
-  handleClickVoice(
-    voiceSettingBtn,
-    voiceSettingBtnText,
-    voiceSettingBtnIcon,
-    setting,
-    isFocused
-  );
+      recognition.onerror = (event) => {
+        textToSpeech(`I cannot undersatnd you. Please give me a valid name`);
+      };
+    }
 
-  // magnifier
-  handleClickMagnify(
-    magnifierBtn,
-    magnifierBtnText,
-    magnifierBtnIcon,
-    isFocused
-  );
+    setTimeout(() => {
+      readHints;
+      setInterval(readHints, 30000); // 30 seconds interval
+    }, 10000);
 
-  //deafmode
-  handleClickDeaf(
-    deafModeBtn,
-    deafModeBtnText,
-    deafModeBtnIcon,
-    mic,
-    textInput,
-    DeafModeOff,
-    isFocused,
-    synth
-  );
+    if (prompt.value === "") {
+      question.innerText = "Any thing you type or say will show up here";
+    } else {
+      question.innerText = prompt.value;
+    }
+
+    //prompt handler
+    handleKeyUp(prompt, question);
+    handleKeyDown(prompt, answer, workspace);
+
+    //voice settings
+    handleClickVoice(
+      voiceSettingBtn,
+      voiceSettingBtnText,
+      voiceSettingBtnIcon,
+      setting,
+      isFocused
+    );
+
+    // magnifier
+    handleClickMagnify(
+      magnifierBtn,
+      magnifierBtnText,
+      magnifierBtnIcon,
+      isFocused
+    );
+
+    //deafmode
+    handleClickDeaf(
+      deafModeBtn,
+      deafModeBtnText,
+      deafModeBtnIcon,
+      mic,
+      textInput,
+      DeafModeOff,
+      isFocused,
+      synth
+    );
+  }, 20000);
 });
