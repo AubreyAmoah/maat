@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else {
       isBusy = true;
 
+      textToSpeech("Hello, tell me your name please.");
       recognition.start();
 
       recognition.onresult = (event) => {
@@ -200,5 +201,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
       isFocused,
       synth
     );
-  }, 10000);
+  }, 5000);
 });
