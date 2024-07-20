@@ -72,6 +72,8 @@ keywords.forEach((keyword, i) => {
 });
 
 let voices = [];
+let speechQueue = [];
+let isSpeaking = false;
 
 function populateVoiceList() {
   voices = synth.getVoices();
@@ -96,7 +98,13 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
-const textToSpeech = (element) => {
+const textToSpeech = (element, onEndCallback, retryCount = 0) => {
+  if (isSpeaking) {
+    speechQueue.push({ element, onEndCallback });
+    return;
+  }
+
+  isSpeaking = true;
   const utterThis = new SpeechSynthesisUtterance(element);
   const selectedOption =
     voiceSelect.selectedOptions[0].getAttribute("data-name");
@@ -107,14 +115,42 @@ const textToSpeech = (element) => {
   }
   utterThis.pitch = pitch.value;
   utterThis.rate = rate.value;
-  synth.speak(utterThis);
-
-  utterThis.onpause = (event) => {
-    const char = event.utterance.text.charAt(event.charIndex);
-    console.log(
-      `Speech paused at character ${event.charIndex} of "${event.utterance.text}", which is "${char}".`
-    );
+  utterThis.onend = () => {
+    isSpeaking = false;
+    if (onEndCallback) onEndCallback();
+    if (speechQueue.length > 0) {
+      const next = speechQueue.shift();
+      textToSpeech(next.element, next.onEndCallback);
+    }
   };
+
+  utterThis.onerror = (event) => {
+    console.error(`SpeechSynthesisUtterance.onerror: ${event.error}`);
+    isSpeaking = false;
+    if (retryCount < 3) {
+      setTimeout(() => {
+        textToSpeech(element, onEndCallback, retryCount + 1);
+      }, 500);
+    }
+  };
+
+  try {
+    synth.speak(utterThis);
+  } catch (error) {
+    console.error(`speechSynthesis.speak error: ${error}`);
+    isSpeaking = false;
+    if (retryCount < 3) {
+      setTimeout(() => {
+        textToSpeech(element, onEndCallback, retryCount + 1);
+      }, 500);
+    }
+  }
+  // if (onEndCallback) {
+  //   utterThis.onend = onEndCallback;
+  // }
+
+  // console.log(utterThis);
+  // synth.speak(utterThis);
 };
 
 const regex =
@@ -130,33 +166,44 @@ document.addEventListener("DOMContentLoaded", (event) => {
   setTimeout(() => {
     loadingScreen.style.display = "none";
 
-    const readHints = () => {
-      textToSpeech(hint);
-    };
+    // const readHints = () => {
+    //   textToSpeech(hint);
+    // };
 
     if (user) {
-      textToSpeech(`Welcome, please tell me your name`);
-      textToSpeech(`Welcome back ${user}, glad to have you back`);
+      // textToSpeech(`Welcome, please tell me your name`);
+      // textToSpeech(`Welcome back ${user}, glad to have you back`);
 
       isBusy = false;
     } else {
       isBusy = true;
 
-      textToSpeech("Hello, tell me your name please.");
-      recognition.start();
+      textToSpeech("Hello, tell me your name please.", () => {
+        recognition.start();
+        console.log("works");
+      });
 
       recognition.onresult = (event) => {
         const word = event.results[0][0].transcript;
         window.localStorage.setItem("user", word);
-        textToSpeech(`your name is ${user}`);
+        textToSpeech(`Your name is ${word}`, () => {
+          isBusy = false;
+        });
       };
 
       recognition.onspeechend = () => {
-        recognition.stop();
+        if (isBusy) {
+          recognition.start();
+        }
       };
 
       recognition.onerror = (event) => {
-        textToSpeech(`I cannot undersatnd you. Please give me a valid name`);
+        textToSpeech(
+          "I cannot understand you. Please give me a valid name",
+          () => {
+            recognition.start();
+          }
+        );
       };
     }
 
@@ -206,7 +253,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       synth
     );
 
-    if (isBusy === true) {
+    if (isBusy === false) {
       hints.onmouseenter = (e) => {
         e.preventDefault();
         synth.cancel();
