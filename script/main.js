@@ -137,6 +137,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (user) {
       textToSpeech(`Welcome, please tell me your name`);
       textToSpeech(`Welcome back ${user}, glad to have you back`);
+
+      isBusy = false;
     } else {
       isBusy = true;
 
