@@ -158,10 +158,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
       };
     }
 
-    setTimeout(() => {
-      readHints;
-      setInterval(readHints, 60000); // 60 seconds interval
-    }, 10000);
+    if (isBusy === false) {
+      setTimeout(() => {
+        readHints;
+        setInterval(readHints, 60000); // 60 seconds interval
+      }, 2000);
+    }
 
     if (prompt.value === "") {
       question.innerText = "Any thing you type or say will show up here";
