@@ -200,5 +200,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
       isFocused,
       synth
     );
-  }, 20000);
+  }, 10000);
 });
