@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     setTimeout(() => {
       readHints;
-      setInterval(readHints, 30000); // 30 seconds interval
+      setInterval(readHints, 60000); // 60 seconds interval
     }, 10000);
 
     if (prompt.value === "") {
