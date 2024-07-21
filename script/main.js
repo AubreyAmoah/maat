@@ -200,22 +200,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
             statement.includes("equation") ||
             statement.includes("equations") ||
             statement.includes("Equations") ||
-            statement.includes("Equation")
+            statement.includes("Equation") ||
+            statement.includes("solve")
           ) {
-            const results = solveEquation(statement);
-            results.forEach((result) => {
-              if (result.error) {
-                answer.innerText = `Equation: ${result.equation}, Error: ${result.error}`;
-                console.log(
-                  `Equation: ${result.equation}, Error: ${result.error}`
-                );
-              } else {
-                answer.innerText = `Equation: ${result.equation}, result: x = ${result.result}`;
-                console.log(
-                  `Equation: ${result.equation}, result: x = ${result.result}`
-                );
+            const result = solveEquation(statement);
+            try {
+              for (let key in result) {
+                if (result.hasOwnProperty(key)) {
+                  answer.innerText = key + " is " + result[key];
+                }
               }
-            });
+            } catch (error) {
+              answer.innerText = "invalid statement";
+            }
+            textToSpeech(answer.innerText)
+            console.log(result);
           } else if (
             statement.includes("mean") ||
             statement.includes("median") ||
@@ -223,31 +222,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
             statement.includes("variance") ||
             statement.includes("standard deviation")
           ) {
-            const sentence = statement;
-
-            const operations = [
-              "mean",
-              "median",
-              "mode",
-              "variance",
-              "standard deviation",
-            ];
-
-            operations.forEach((op) => {
-              const result = solveStatistics(
-                sentence
-                  .replace("mean", op)
-                  .replace("median", op)
-                  .replace("mode", op)
-                  .replace("variance", op)
-                  .replace("standard deviation", op)
-              );
-              if (result.result !== undefined) {
-                answer.innerText = `Operation: ${result.operation}, Result: ${result.result}`;
-              } else {
-                answer.innerText = result;
+            const result = solveStatistics(statement);
+            try {
+              for (let key in result) {
+                if (result.hasOwnProperty(key)) {
+                  answer.innerText = key + " is " + result[key];
+                }
               }
-            });
+            } catch (error) {
+              answer.innerText = "invalid statement";
+            }
+            textToSpeech(answer.innerText);
+            console.log(result);
           } else if (statement.includes("change my name")) {
             recognition.stop();
             textToSpeech(`What is your new name?`, () => {
