@@ -1,4 +1,9 @@
-import { solveEquation, calculateFromStatement, calculatePercentage } from "./arithmetic.mjs";
+import {
+  solveEquation,
+  solveStatistics,
+  calculateFromStatement,
+  calculatePercentage,
+} from "./arithmetic.mjs";
 
 export const handleKeyUp = (prompt, question) => {
   prompt.addEventListener("keyup", function (e) {
@@ -22,11 +27,41 @@ export const handleKeyDown = (prompt, answer, workspace) => {
         answer.innerText = `Your answer is ${result}`;
       } else if (
         statement.includes("equation") ||
-        statement.includes("expression") ||
-        statement.includes("statement")
+        statement.includes("equations") ||
+        statement.includes("Equations") ||
+        statement.includes("Equation") ||
+        statement.includes("solve")
       ) {
         const result = solveEquation(statement);
-        answer.innerText = `Your answer is ${result}`;
+        try {
+          for (let key in result) {
+            if (result.hasOwnProperty(key)) {
+              answer.innerText = key + " is " + result[key];
+            }
+          }
+        } catch (error) {
+          answer.innerText = "invalid statement";
+        }
+        console.log(result)
+      } else if (
+        statement.includes("mean") ||
+        statement.includes("median") ||
+        statement.includes("mode") ||
+        statement.includes("variance") ||
+        statement.includes("standard deviation")
+      ) {
+        const result = solveStatistics(statement);
+        try {
+          for (let key in result) {
+            if (result.hasOwnProperty(key)) {
+              answer.innerText = key + " is " + result[key];
+            }
+          }
+        } catch (error) {
+          answer.innerText = "invalid statement";
+        }
+
+        console.log(result);
       } else {
         const result = calculateFromStatement(statement);
         answer.innerText = `Your answer is ${result}`;

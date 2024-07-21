@@ -6,6 +6,7 @@ import {
   calculateFromStatement,
   calculatePercentage,
   solveEquation,
+  solveStatistics,
 } from "./arithmetic.mjs";
 
 const mic = document.getElementById("microphone");
@@ -195,6 +196,58 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const result = calculatePercentage(statement);
             answer.innerText = `Your answer is ${result}`;
             textToSpeech(answer.innerText);
+          } else if (
+            statement.includes("equation") ||
+            statement.includes("equations") ||
+            statement.includes("Equations") ||
+            statement.includes("Equation")
+          ) {
+            const results = solveEquation(statement);
+            results.forEach((result) => {
+              if (result.error) {
+                answer.innerText = `Equation: ${result.equation}, Error: ${result.error}`;
+                console.log(
+                  `Equation: ${result.equation}, Error: ${result.error}`
+                );
+              } else {
+                answer.innerText = `Equation: ${result.equation}, result: x = ${result.result}`;
+                console.log(
+                  `Equation: ${result.equation}, result: x = ${result.result}`
+                );
+              }
+            });
+          } else if (
+            statement.includes("mean") ||
+            statement.includes("median") ||
+            statement.includes("mode") ||
+            statement.includes("variance") ||
+            statement.includes("standard deviation")
+          ) {
+            const sentence = statement;
+
+            const operations = [
+              "mean",
+              "median",
+              "mode",
+              "variance",
+              "standard deviation",
+            ];
+
+            operations.forEach((op) => {
+              const result = solveStatistics(
+                sentence
+                  .replace("mean", op)
+                  .replace("median", op)
+                  .replace("mode", op)
+                  .replace("variance", op)
+                  .replace("standard deviation", op)
+              );
+              if (result.result !== undefined) {
+                answer.innerText = `Operation: ${result.operation}, Result: ${result.result}`;
+              } else {
+                answer.innerText = result;
+              }
+            });
           } else if (statement.includes("change my name")) {
             recognition.stop();
             textToSpeech(`What is your new name?`, () => {
@@ -223,6 +276,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
               );
             };
           } else {
+            console.log("ooo");
             const result = calculateFromStatement(statement);
             answer.innerText = `Your answer is ${result}`;
             textToSpeech(answer.innerText);
