@@ -85,6 +85,8 @@ export function calculateFromStatement(statement) {
   return result;
 }
 
+//percentage
+
 export function calculatePercentage(statement) {
   // Convert statement to lowercase to handle case insensitivity
   statement = statement.toLowerCase();
@@ -124,59 +126,94 @@ export function calculatePercentage(statement) {
   return results;
 }
 
-export function solveEquation(statement) {
-  // Convert statement to lowercase and remove spaces
-  statement = statement.toLowerCase().replace(/\s+/g, "");
+// Equation
 
-  // Extract the left-hand side (lhs) and right-hand side (rhs) of the equation
-  const [lhs, rhs] = statement.split("=");
-  if (!lhs || !rhs) {
-    return "Invalid statement. Please provide a valid algebraic expression.";
-  }
+export function solveEquation(equation) {
+  let trimmedStatement = equation.split(" ").join("");
+  let extracted = [];
+  let equationStarted = false;
 
-  // Function to parse terms and coefficients
-  function parseTerms(expression) {
-    const termPattern = /([+-]?[^-+]+)/g;
-    const terms = expression.match(termPattern);
-    let coefficientSum = 0;
-    let constantSum = 0;
-
-    terms.forEach((term) => {
-      if (term.includes("x")) {
-        let coefficient = term.replace("x", "");
-        if (coefficient === "" || coefficient === "+") coefficient = 1;
-        else if (coefficient === "-") coefficient = -1;
-        coefficientSum += parseFloat(coefficient);
-      } else {
-        constantSum += parseFloat(term);
+  for (let i = 0; i < trimmedStatement.length; i++) {
+    // Determine if the equation has started, based on finding a digit or a sign with a digit or variable following it
+    if (!equationStarted) {
+      if (
+        /[0-9]/.test(trimmedStatement[i]) ||
+        (trimmedStatement[i] === "-" &&
+          /[0-9x]/.test(trimmedStatement[i + 1])) ||
+        (trimmedStatement[i] === "+" && /[0-9x]/.test(trimmedStatement[i + 1]))
+      ) {
+        equationStarted = true;
       }
-    });
+    }
 
-    return { coefficientSum, constantSum };
-  }
+    // Start extracting only after we've determined the equation has started
+    if (equationStarted) {
+      if (
+        /[0-9x]/.test(trimmedStatement[i]) ||
+        trimmedStatement[i] === "-" ||
+        trimmedStatement[i] === "+"
+      ) {
+        extracted.push(trimmedStatement[i]);
+      }
 
-  // Parse the left-hand side and right-hand side terms
-  const lhsTerms = parseTerms(lhs);
-  const rhsTerms = parseTerms(rhs);
-
-  // Calculate the net coefficients and constants
-  const netCoefficient = lhsTerms.coefficientSum - rhsTerms.coefficientSum;
-  const netConstant = rhsTerms.constantSum - lhsTerms.constantSum;
-  console.log(netCoefficient);
-  console.log(netConstant);
-
-  // Solve for x
-  if (netCoefficient === 0) {
-    if (netConstant === 0) {
-      return "Infinite solutions.";
-    } else {
-      return "No valid solution.";
+      // If current character is part of a number/variable and the next is an operator or equals sign, include the operator
+      if (
+        /[0-9x]/.test(trimmedStatement[i]) &&
+        /[+\-=]/.test(trimmedStatement[i + 1])
+      ) {
+        extracted.push(trimmedStatement[i + 1]);
+        i++; // Skip the operator we've already added
+      }
     }
   }
 
-  const x = netConstant / netCoefficient;
-  return { x: x };
+  const extractedEquation = extracted.toString().replace(/,/g, "");
+  let variableMatch = extractedEquation.match(/[a-zA-Z]/);
+  let variable = variableMatch ? variableMatch[0] : null;
+
+  // Split the equation into left and right parts
+  const [left, right] = extractedEquation.split("=");
+
+  // Extract coefficients and constants
+  let coefficient = 0;
+  let constant = 0;
+
+  // Helper function to process a term
+  function processTerm(term, isRightSide) {
+    let isNegative = term[0] === "-";
+    term = term.replace(/-/g, "").replace(/\+/g, "");
+
+    if (term.includes("x")) {
+      let coeff = term.replace("x", "");
+      coeff = coeff === "" ? 1 : parseFloat(coeff);
+      coeff = isNegative ? -coeff : coeff;
+      coefficient += isRightSide ? -coeff : coeff;
+    } else {
+      let value = parseFloat(term);
+      value = isNegative ? -value : value;
+      constant += isRightSide ? value : -value;
+    }
+  }
+
+  // Process left side
+  const leftTerms = left.match(/[+-]?[^+-]+/g);
+  if (leftTerms) leftTerms.forEach((term) => processTerm(term, false));
+
+  // Process right side
+  const rightTerms = right.match(/[+-]?[^+-]+/g);
+  if (rightTerms) rightTerms.forEach((term) => processTerm(term, true));
+
+  // Solve for x
+  if (coefficient === 0) {
+    return constant === 0 ? "Infinite solutions" : "No solution";
+  }
+
+  const x = constant / coefficient;
+  console.log(x);
+  return (`${variable} is equal to ${x}`);
 }
+
+//statistics
 
 export function solveStatistics(statement) {
   statement = statement.toLowerCase();

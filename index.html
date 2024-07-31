@@ -18,6 +18,31 @@
         font-size: 2em;
         z-index: 1000;
       }
+
+      .magnify-text {
+        display: inline-block;
+        cursor: none; /* Hide default cursor */
+      }
+
+      #magnifies {
+        position: absolute;
+        pointer-events: none; /* Prevent the magnifier from blocking interactions */
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #000;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        display: none; /* Initially hidden */
+        z-index: 1000;
+        background-color: white;
+        text-align: center;
+      }
+
+      #magnifies-content {
+        font-size: 2em; /* Magnification level */
+        transform-origin: center;
+      }
     </style>
 
     <link rel="stylesheet" href="style.css" />
@@ -28,8 +53,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.2/math.min.js"></script>
   </head>
   <body>
+    <div id="magnifies">
+      <div id="magnifies-content"></div>
+    </div>
     <div class="container">
-      <div class="hints" id="hints"></div>
+      <div class="hints magnify-text" id="hints"></div>
       <div class="center">
         <button id="microphone" class="microphone">
           <i class="fa-solid fa-microphone"></i>
@@ -108,5 +136,42 @@
 
     <div id="loading-screen">Loading...</div>
   </body>
+  <script>
+    const magnifier = document.getElementById("magnifies");
+    const magnifierContent = document.getElementById("magnifies-content");
+    const magnifiableText = document.querySelector(".magnify-text");
+
+    magnifiableText.addEventListener("mouseenter", () => {
+      magnifier.style.display = "block";
+    });
+
+    magnifiableText.addEventListener("mouseleave", () => {
+      magnifier.style.display = "none";
+    });
+
+    magnifiableText.addEventListener("mousemove", (e) => {
+      const magnifierSize = magnifier.offsetWidth / 2;
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      // Position the magnifier
+      magnifier.style.left = `${mouseX - magnifierSize}px`;
+      magnifier.style.top = `${mouseY - magnifierSize}px`;
+
+      // Get the bounding rectangle of the magnifiable text
+      const rect = magnifiableText.getBoundingClientRect();
+
+      // Calculate the position of the mouse relative to the text element
+      const x = mouseX - rect.left;
+      const y = mouseY - rect.top;
+
+      // Update the content of the magnifier with the same text
+      magnifierContent.innerText = magnifiableText.innerText;
+
+      // Position the magnified text content inside the magnifier
+      magnifierContent.style.left = `-${x * 2}px`;
+      magnifierContent.style.top = `-${y * 2}px`;
+    });
+  </script>
   <script type="module" src="./script/main.js"></script>
 </html>

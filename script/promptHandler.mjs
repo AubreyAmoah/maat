@@ -33,16 +33,7 @@ export const handleKeyDown = (prompt, answer, workspace) => {
         statement.includes("solve")
       ) {
         const result = solveEquation(statement);
-        try {
-          for (let key in result) {
-            if (result.hasOwnProperty(key)) {
-              answer.innerText = key + " is " + result[key];
-            }
-          }
-        } catch (error) {
-          answer.innerText = "invalid statement";
-        }
-        console.log(result)
+        answer.innerText = result;
       } else if (
         statement.includes("mean") ||
         statement.includes("median") ||
