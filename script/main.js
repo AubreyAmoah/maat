@@ -205,6 +205,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
           ) {
             const result = solveEquation(statement);
             answer.innerText = result;
+            textToSpeech(answer.innerText);
           } else if (
             statement.includes("mean") ||
             statement.includes("median") ||
