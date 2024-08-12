@@ -37,11 +37,15 @@
         z-index: 1000;
         background-color: white;
         text-align: center;
+        align-items: center;
+        justify-content: center;
+        display: flex;
       }
 
       #magnifies-content {
         font-size: 2em; /* Magnification level */
         transform-origin: center;
+        white-space: nowrap;
       }
     </style>
 
@@ -52,7 +56,7 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.2/math.min.js"></script>
   </head>
-  <body>
+  <body id="container">
     <div id="magnifies">
       <div id="magnifies-content"></div>
     </div>
@@ -64,8 +68,14 @@
         </button>
 
         <div id="text-input" class="manual-input hidden">
-          <textarea name="" id="prompt" cols="40" rows="10"></textarea>
-          <p>Press Enter Key When Done</p>
+          <textarea
+            class="magnify-text"
+            name=""
+            id="prompt"
+            cols="40"
+            rows="10"
+          ></textarea>
+          <p class="magnify-text">Press Enter Key When Done</p>
         </div>
       </div>
 
@@ -142,7 +152,7 @@
     const magnifiableText = document.querySelector(".magnify-text");
 
     magnifiableText.addEventListener("mouseenter", () => {
-      magnifier.style.display = "block";
+      magnifier.style.display = "flex";
     });
 
     magnifiableText.addEventListener("mouseleave", () => {
@@ -165,12 +175,23 @@
       const x = mouseX - rect.left;
       const y = mouseY - rect.top;
 
-      // Update the content of the magnifier with the same text
-      magnifierContent.innerText = magnifiableText.innerText;
+      // Determine the character position in the text based on mouse position
+      const charIndex = Math.floor(
+        (x / rect.width) * magnifiableText.innerText.length
+      );
 
-      // Position the magnified text content inside the magnifier
-      magnifierContent.style.left = `-${x * 2}px`;
-      magnifierContent.style.top = `-${y * 2}px`;
+      // Get the word at the cursor position
+      const words = magnifiableText.innerText.split(" ");
+      let wordIndex = 0;
+      let currentLength = 0;
+      while (currentLength <= charIndex && wordIndex < words.length) {
+        currentLength += words[wordIndex].length + 1; // +1 for space
+        wordIndex++;
+      }
+      const hoveredWord = words[wordIndex - 1];
+
+      // Update the content of the magnifier with the hovered word
+      magnifierContent.innerText = hoveredWord;
     });
   </script>
   <script type="module" src="./script/main.js"></script>

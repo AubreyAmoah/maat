@@ -1,3 +1,10 @@
+const container = document.getElementById("container");
+var isChrome =
+  navigator.userAgent.includes("Chrome") &&
+  navigator.vendor.includes("Google Inc");
+if (!isChrome) {
+  container.innerHTML = `<h2>Your Browser doesn't support this app. Please download the <a href="https://www.google.com/chrome/?brand=JJTC&gad_source=1&gclsrc=ds">supported Bowser here.</a> </h2`
+}
 import { handleClickDeaf } from "./deafModeHandler.mjs";
 import { handleClickMagnify } from "./magnifyHandler.mjs";
 import { handleKeyDown, handleKeyUp } from "./promptHandler.mjs";
@@ -163,13 +170,14 @@ const regex =
   /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
 
 const hint =
-  (hints.innerHTML = `Tap on the microphone at the center of the screen to initiate chat.<br /> On first load you will be asked for your name.<br /> please wait for the beep before speaking to the app.`);
+  (hints.innerHTML = `Tap on the microphone at the center of the screen to initiate chat.<br /> On first load you will be asked for your name.<br /> please wait for the beep before speaking to the app. <br /> Use google chrome for full functionality.`);
 const loadingScreen = document.getElementById("loading-screen");
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
 
   setTimeout(() => {
     loadingScreen.style.display = "none";
+    textToSpeech(hint);
 
     if (prompt.value === "") {
       question.innerText = "Any thing you type or say will show up here";
