@@ -172,7 +172,10 @@ const regex =
   /\bsum\b|\bsum of\b|\bsumof\b|\bplus\b|\badd\b|\bminus\b|\bsubtract\b|[-]|\baddition\b|\bsubtraction\b|\bnegative\b|\bpositive\b|\bproduct\b|\bproduct of\b|\bproductof\b|[*]|\bmultiply\b|\bmultiplication\b|\btimes\b|\bmultiplied\b|\bdivision\b|\bdivide\b|\bdivided\b|[/]|\bfrom\b|\bremove\b/gi;
 
 const hint =
-  (hints.innerHTML = `Tap on the microphone at the center of the screen to initiate chat.<br /> On first load you will be asked for your name.<br /> please wait for the beep before speaking to the app. <br /> Use google chrome for full functionality.`);
+  (hints.innerHTML = `Tap on the microphone at the center of the screen to initiate chat.
+  On first load you will be asked for your name.
+  please wait for the beep before speaking to the app.
+  Use google chrome for full functionality.`);
 const loadingScreen = document.getElementById("loading-screen");
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
