@@ -3,7 +3,7 @@ var isChrome =
   navigator.userAgent.includes("Chrome") &&
   navigator.vendor.includes("Google Inc");
 if (!isChrome) {
-  container.innerHTML = `<h2>Your Browser doesn't support this app. Please download the <a href="https://www.google.com/chrome/?brand=JJTC&gad_source=1&gclsrc=ds">supported Bowser here.</a> </h2`
+  container.innerHTML = `<h2>Your Browser doesn't support this app. Please download the <a href="https://www.google.com/chrome/?brand=JJTC&gad_source=1&gclsrc=ds">supported Bowser here.</a> </h2`;
 }
 import { handleClickDeaf } from "./deafModeHandler.mjs";
 import { handleClickMagnify } from "./magnifyHandler.mjs";
@@ -15,6 +15,8 @@ import {
   solveEquation,
   solveStatistics,
 } from "./arithmetic.mjs";
+
+const glass = document.getElementById("glass");
 
 const mic = document.getElementById("microphone");
 const textInput = document.getElementById("text-input");
@@ -333,7 +335,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       magnifierBtn,
       magnifierBtnText,
       magnifierBtnIcon,
-      isFocused
+      isFocused,
+      glass
     );
 
     //deafmode
