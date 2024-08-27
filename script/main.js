@@ -189,6 +189,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       question.innerText = prompt.value;
     }
 
+    container.ondblclick = () => {
+      textToSpeech(hint);
+      console.log('clickedddd')
+    };
+
     mic.onclick = () => {
       if (user) {
         synth.cancel();
