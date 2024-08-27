@@ -179,7 +179,6 @@ const hint =
 const loadingScreen = document.getElementById("loading-screen");
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
-  textToSpeech(hint);
 
   setTimeout(() => {
     loadingScreen.style.display = "none";
