@@ -179,10 +179,10 @@ const hint =
 const loadingScreen = document.getElementById("loading-screen");
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
+  textToSpeech(hint);
 
   setTimeout(() => {
     loadingScreen.style.display = "none";
-    textToSpeech(hint);
 
     if (prompt.value === "") {
       question.innerText = "Any thing you type or say will show up here";
@@ -360,6 +360,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     rate.onchange = () => {
       rateValue.textContent = rate.value;
+    };
+
+    hints.onclick = () => {
+      synth.cancel();
+      textToSpeech(hint);
     };
   }, 5000);
 });
