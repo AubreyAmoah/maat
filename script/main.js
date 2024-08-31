@@ -191,7 +191,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     container.ondblclick = () => {
       textToSpeech(hint);
-      console.log('clickedddd')
+      console.log("clickedddd");
+    };
+
+    if (magnifierBtn.classList.contains(`${isFocused}`)) {
+      hints.onmouseenter = () => {
+        hints.classList.add("distorted-text");
+        console.log('okayyyy')
+      };
+    }
+
+    hints.onmouseleave = () => {
+      hints.classList.remove("distorted-text");
     };
 
     mic.onclick = () => {
